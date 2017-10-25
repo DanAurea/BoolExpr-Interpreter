@@ -1,2 +1,4 @@
 vrai et faux
 a = faux
+b = faux et non (a ou vrai)
+PRINT

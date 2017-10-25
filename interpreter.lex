@@ -14,6 +14,7 @@ or			=	"ou" 	| 	"OU"	| 	"or"	| 	"OR"
 true		=	"vrai" 	|	"VRAI"	| 	"true"	|	"TRUE"
 false		=	"faux"	|	"FAUX"	|	"false"	|	"FALSE"
 not			=	"non"	|	"NON"	|	"not"	|	"NOT"
+print 		=	"PRINT"
 whitespace	=	[ \r\t\f]
 
 %%
@@ -23,6 +24,7 @@ whitespace	=	[ \r\t\f]
 {true}				{return new Symbol(sym.True);}
 {false}				{return new Symbol(sym.False);}
 {not}				{return new Symbol(sym.not);}
+{print}				{return new Symbol(sym.print);}
 {id}				{return new Symbol(sym.id);}
 "="		      		{return new Symbol(sym.assign);}
 "("		      		{return new Symbol(sym.lbracket);}

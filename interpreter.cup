@@ -11,6 +11,7 @@ action code {:
 :}
 
 terminal id ;
+terminal print;
 terminal assign;
 terminal lbracket;
 terminal rbracket;
@@ -30,7 +31,7 @@ precedence left or;
 precedence left and;
 
 BLOCK		::=	EXPR BLOCK	|	EXPR;
-EXPR		::=	id assign SEXPR NL 	|	SEXPR NL;
-SEXPR		::=	True	|	False	|	SEXPR BINARY_OP SEXPR	|	not PEXPR 	|	PEXPR;
+EXPR		::=	id assign SEXPR NL 	|	SEXPR NL | print NL;
+SEXPR		::=	True	|	False	|	id	|	SEXPR BINARY_OP SEXPR	|	not PEXPR	|	PEXPR;
 PEXPR		::=	lbracket SEXPR rbracket;
 BINARY_OP	::= and | or;
