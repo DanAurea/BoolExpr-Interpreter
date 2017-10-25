@@ -1,0 +1,36 @@
+// Specification Jcup
+import java_cup.runtime.*;
+
+parser code {:
+	public static void main(String args[]) throws Exception{
+		new parser(new Yylex(System.in)).parse();
+	}
+:}
+
+action code {:
+:}
+
+terminal id ;
+terminal assign;
+terminal lbracket;
+terminal rbracket;
+terminal and;
+terminal or	;
+terminal True;
+terminal False;
+terminal not;
+terminal NL;
+
+non	terminal	BLOCK;
+non terminal 	EXPR;
+non terminal	SEXPR;
+non terminal	PEXPR;
+non terminal	BINARY_OP;
+precedence left or;
+precedence left and;
+
+BLOCK		::=	EXPR BLOCK	|	EXPR;
+EXPR		::=	id assign SEXPR NL 	|	SEXPR NL;
+SEXPR		::=	True	|	False	|	SEXPR BINARY_OP SEXPR	|	not PEXPR 	|	PEXPR;
+PEXPR		::=	lbracket SEXPR rbracket;
+BINARY_OP	::= and | or;
