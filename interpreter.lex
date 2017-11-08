@@ -24,7 +24,7 @@ whitespace	=	[ \r\t\f]
 {false}				{return new Symbol(sym.False);}
 {not}				{return new Symbol(sym.not);}
 {print}				{return new Symbol(sym.print);}
-{id}				{return new Symbol(sym.id);}
+{id}				{return new Symbol(sym.id, new String(yytext()));}
 "="		      		{return new Symbol(sym.assign);}
 "("		      		{return new Symbol(sym.lbracket);}
 ")"		      		{return new Symbol(sym.rbracket);}

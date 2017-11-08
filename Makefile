@@ -1,4 +1,4 @@
-build: genLex genSyn compilSyn testSyn
+build: genLex genSyn compilSyn
 	
 genLex:
 	java JFlex.Main interpreter.lex
@@ -12,5 +12,5 @@ compilSyn: genSyn
 testSyn: compilSyn
 	java parser < sourceCode
 
-parse: build
+interpreter: build
 	java parser
