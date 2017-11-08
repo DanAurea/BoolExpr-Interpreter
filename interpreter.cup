@@ -22,12 +22,14 @@ terminal False;
 terminal not;
 terminal NL;
 
+non terminal	BLOCK;
 non terminal	CONSTANT;
 non terminal 	EXPR;
 non terminal	SEXPR;
 non terminal	TERM;
 
-EXPR		::=	TERM 		|	id assign	EXPR	|	TERM or TERM;
+BLOCK		::=	EXPR 		| 	EXPR NL BLOCK;
+EXPR		::=	TERM 		|	id assign	EXPR	|	TERM or TERM |;
 TERM 		::= SEXPR 		|	SEXPR and SEXPR		|	print {: System.out.println("Les valeurs des variables sont : ");:};
 SEXPR		::= CONSTANT	|	id	|	not SEXPR	|	lbracket EXPR rbracket;
 CONSTANT	::=	True {: RESULT = true; :}		| 	False {: RESULT = false; :};
