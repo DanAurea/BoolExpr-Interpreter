@@ -7,7 +7,6 @@ import java_cup.runtime.Symbol;
 %line
 %column
 
-
 id 			=	[a-zA-Z][a-zA-Z0-9]*
 and			=	"et" 	| 	"ET" 	| 	"and" 	| 	"AND"
 or			=	"ou" 	| 	"OU"	| 	"or"	| 	"OR"

@@ -28,7 +28,7 @@ non terminal 	EXPR;
 non terminal	SEXPR;
 non terminal	TERM;
 
-BLOCK		::=	EXPR 		| 	EXPR NL BLOCK;
+BLOCK		::=	EXPR {: System.out.println("Au revoir !");:} | 	EXPR NL BLOCK;
 EXPR		::=	TERM 		|	id assign	EXPR	|	TERM or TERM |;
 TERM 		::= SEXPR 		|	SEXPR and SEXPR		|	print {: System.out.println("Les valeurs des variables sont : ");:};
 SEXPR		::= CONSTANT	|	id	|	not SEXPR	|	lbracket EXPR rbracket;
