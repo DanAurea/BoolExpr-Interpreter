@@ -14,3 +14,8 @@ testSyn: compilSyn
 
 interpreter: build
 	java parser
+clean:
+	rm 'CUP$parser$actions.class'
+	rm *.class
+	rm *.java
+	rm *.~

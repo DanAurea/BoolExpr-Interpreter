@@ -13,7 +13,7 @@ or			=	"ou" 	| 	"OU"	| 	"or"	| 	"OR"
 true		=	"vrai" 	|	"VRAI"	| 	"true"	|	"TRUE"
 false		=	"faux"	|	"FAUX"	|	"false"	|	"FALSE"
 not			=	"non"	|	"NON"	|	"not"	|	"NOT"
-print 		=	"PRINT"
+print 		=	"print"	|	"PRINT"
 whitespace	=	[ \r\t\f]
 
 %%

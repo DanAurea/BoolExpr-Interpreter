@@ -11,6 +11,17 @@ parser code {:
 
 action code {:
 	HashMap<String, Boolean> symbolTable = new HashMap<String, Boolean>();
+	
+	public void isNullExpr(Boolean e1, Boolean e2){
+		if(e1 == null){
+			System.err.println("Error: Left operand can't be null.");
+		}
+
+		if(e2 == null){
+			System.err.println("Error: Right operand can't be null.");
+		} 
+	}
+
 :}
 
 terminal String id ;
@@ -31,30 +42,53 @@ non terminal 	Boolean EXPR;
 non terminal	Boolean SEXPR;
 non terminal	Boolean TERM;
 
-BLOCK		::=	EXPR {: System.out.println("Au revoir !");:} | 	EXPR NL BLOCK;
+BLOCK		::=	EXPR {: System.out.println("Goodbye !");:} 	| EXPR NL BLOCK;
 
-EXPR		::=	TERM:bool {: System.out.println(bool ? "vrai" : "faux"); :} 		|	id:id assign TERM:bool {: 
-																								symbolTable.put(id, bool);
-																								System.out.printf(id + " vaut %s\n", bool ? "vrai" : "faux"); 
-																							:}	
-																| 	print {: 	
-																				if(!symbolTable.isEmpty()){
-																					System.out.println("Les valeurs des variables sont : ");
-																					for(Map.Entry<String, Boolean> entry: symbolTable.entrySet()){
-																						String key 		= 	entry.getKey();
-																						Boolean value  =	entry.getValue();
-																						System.out.printf(key + " vaut %s\n", value ? "vrai" : "faux");
-																					} 
-																				}else
-																					System.out.println("Table des symboles vides.");
-																			:}
-																|;
+EXPR		::=	TERM:bool {:	if(bool != null)
+									System.out.println(bool ? "==> True" : "==> False");
+								else
+									System.err.println("Error: Null value can't be evaluated.");
+							:} 		
+							|	id:id assign TERM:bool {: 	
+															if(bool != null){
+																symbolTable.put(id, bool);
+																System.out.printf("==> " + id + " equals %s\n", bool ? "True" : "False");															
+															}
+															else
+																System.err.println("Error: Null value can't be assigned."); 
+														:}	
+														| 	print {: 	
+																if(!symbolTable.isEmpty()){
+																	System.out.println("==> The values of variables are : ");
+																	for(Map.Entry<String, Boolean> entry: symbolTable.entrySet()){
+																		String key 		= 	entry.getKey();
+																		Boolean value  =	entry.getValue();
+																		System.out.printf(key + " = %s\n", value ? "True" : "False");
+																	} 
+																}else
+																	System.err.println("Error: Empty symbol table.");
+															:}
+															| error EXPR{: System.err.println("Error: Bad expression.");:}
+															|;
 
-TERM 		::= SEXPR:bool {: RESULT = bool; :} 		|	SEXPR:e1 and SEXPR:e2 {: RESULT = e1 && e2; :} | SEXPR:e1 or SEXPR:e2 {: RESULT = e1 || e2; :};
+TERM 		::= SEXPR:bool {: RESULT = bool; :} 		|	SEXPR:e1 and SEXPR:e2 {:	 
+																						if(e1 != null && e2 != null)
+																							RESULT = e1 && e2;
+																						else{
+																							isNullExpr(e1, e2);
+																						}
+																					:} 
+																					| SEXPR:e1 or SEXPR:e2 {: 
+																												if(e1 != null && e2 != null) 
+																													RESULT = e1 || e2;
+																												else{
+																													isNullExpr(e1, e2);
+																												}
+																											:};
 
 SEXPR		::= CONSTANT:bool {: RESULT = bool; :}	|	id:id {: 	
 																	if(!symbolTable.containsKey(id)){
-																		System.err.println(id + " is not declared.");
+																		System.err.println("Error: " + id + " is not declared.");
 																	}else
 																		RESULT = symbolTable.get(id);  
 																:}	
