@@ -1,0 +1,9 @@
+vrai faux
+
+
+a = faux
+faux our non a
+
+
+b = faux et non (a ou vrai)
+PRINT^

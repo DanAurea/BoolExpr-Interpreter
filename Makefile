@@ -9,8 +9,11 @@ genSyn: genLex
 compilSyn: genSyn
 	javac parser.java sym.java Yylex.java
 
-testSyn: compilSyn
+test1: compilSyn
 	java parser < sourceCode
+
+test2: compilSyn
+	java parser < wrongCode
 
 interpreter: build
 	java parser

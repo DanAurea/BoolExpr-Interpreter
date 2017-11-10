@@ -68,7 +68,6 @@ EXPR		::=	TERM:bool {:	if(bool != null)
 																}else
 																	System.err.println("Error: Empty symbol table.");
 															:}
-															| error EXPR{: System.err.println("Error: Bad expression.");:}
 															|;
 
 TERM 		::= SEXPR:bool {: RESULT = bool; :} 		|	SEXPR:e1 and SEXPR:e2 {:	 
@@ -84,7 +83,8 @@ TERM 		::= SEXPR:bool {: RESULT = bool; :} 		|	SEXPR:e1 and SEXPR:e2 {:
 																												else{
 																													isNullExpr(e1, e2);
 																												}
-																											:};
+																											:}
+																					| error TERM {: System.err.println("Error: Bad expression.");:};
 
 SEXPR		::= CONSTANT:bool {: RESULT = bool; :}	|	id:id {: 	
 																	if(!symbolTable.containsKey(id)){

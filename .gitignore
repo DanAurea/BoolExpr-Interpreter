@@ -6,4 +6,5 @@
 !*.lex
 !*.cup
 !sourceCode
+!wrongCode
 !Makefile
