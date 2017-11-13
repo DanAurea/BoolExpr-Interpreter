@@ -37,62 +37,66 @@ terminal not;
 terminal NL;
 
 non terminal	BLOCK;
+non terminal 	INSTRUCTION;
 non terminal	Boolean CONSTANT;
 non terminal 	Boolean EXPR;
 non terminal	Boolean SEXPR;
-non terminal	Boolean TERM;
 
-BLOCK		::=	EXPR {: System.out.println("Goodbye !");:} 	| EXPR NL BLOCK;
+precedence left or, and;
 
-EXPR		::=	TERM:bool {:	if(bool != null)
+BLOCK		::= INSTRUCTION {: System.out.println("Goodbye !");:} | INSTRUCTION NL BLOCK;
+
+INSTRUCTION ::= EXPR:bool {:	
+								if(bool != null)
 									System.out.println(bool ? "==> True" : "==> False");
 								else
 									System.err.println("Error: Null value can't be evaluated.");
-							:} 		
-							|	id:id assign TERM:bool {: 	
+							:} 
+							| id:id assign EXPR:bool {: 	
 															if(bool != null){
 																symbolTable.put(id, bool);
 																System.out.printf("==> " + id + " equals %s\n", bool ? "True" : "False");															
 															}
 															else
 																System.err.println("Error: Null value can't be assigned."); 
-														:}	
-														| 	print {: 	
-																if(!symbolTable.isEmpty()){
-																	System.out.println("==> The values of variables are : ");
-																	for(Map.Entry<String, Boolean> entry: symbolTable.entrySet()){
-																		String key 		= 	entry.getKey();
-																		Boolean value  =	entry.getValue();
-																		System.out.printf(key + " = %s\n", value ? "True" : "False");
-																	} 
-																}else
-																	System.err.println("Error: Empty symbol table.");
-															:}
-															|;
-
-TERM 		::= SEXPR:bool {: RESULT = bool; :} 		|	SEXPR:e1 and SEXPR:e2 {:	 
-																						if(e1 != null && e2 != null)
-																							RESULT = e1 && e2;
-																						else{
-																							isNullExpr(e1, e2);
-																						}
-																					:} 
-																					| SEXPR:e1 or SEXPR:e2 {: 
-																												if(e1 != null && e2 != null) 
-																													RESULT = e1 || e2;
-																												else{
-																													isNullExpr(e1, e2);
-																												}
-																											:}
-																					| error TERM {: System.err.println("Error: Bad expression.");:};
-
-SEXPR		::= CONSTANT:bool {: RESULT = bool; :}	|	id:id {: 	
-																	if(!symbolTable.containsKey(id)){
-																		System.err.println("Error: " + id + " is not declared.");
+														:}
+														| print {: 	
+																	if(!symbolTable.isEmpty()){
+																		System.out.println("==> The values of variables are : ");
+																		for(Map.Entry<String, Boolean> entry: symbolTable.entrySet()){
+																			String key 		= 	entry.getKey();
+																			Boolean value  =	entry.getValue();
+																			System.out.printf(key + " = %s\n", value ? "True" : "False");
+																		} 
 																	}else
-																		RESULT = symbolTable.get(id);  
-																:}	
-																|	not SEXPR:bool {: RESULT = !bool; :}	
-																|	lbracket TERM:bool rbracket {: RESULT = bool;:};
+																		System.err.println("Error: Empty symbol table.");
+																:}
+																| error EXPR {: System.err.println("Error: Bad expression.");:} 
+																|;
+
+EXPR 		::=	EXPR:e1 and EXPR:e2 {:	 
+										if(e1 != null && e2 != null)
+											RESULT = e1 && e2;
+										else{
+											isNullExpr(e1, e2);
+										}
+									:} 
+									| EXPR:e1 or EXPR:e2 	{: 
+																if(e1 != null && e2 != null) 
+																	RESULT = e1 || e2;
+																else{
+																	isNullExpr(e1, e2);
+																}
+															:}
+															| SEXPR:bool {: RESULT = bool;:};
+
+SEXPR 		::= CONSTANT:bool {: RESULT = bool; :} | id:id {:
+																if(!symbolTable.containsKey(id)){
+																	System.err.println("Error: " + id + " is not declared.");
+																}else
+																	RESULT = symbolTable.get(id);
+															:} 
+															| not SEXPR:bool {: RESULT = !bool; :} 
+															| lbracket EXPR:bool rbracket {: RESULT = bool;:};
 
 CONSTANT	::=	True {: RESULT = true; :}		| 	False {: RESULT = false; :};

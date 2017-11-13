@@ -2,4 +2,7 @@ vrai et faux
 a = faux
 faux ou non a
 b = faux et non (a ou vrai)
+b = vrai et non (non(a) et non(a))
+b = vrai et non (a et non(a))
+a et vrai ou faux et vrai ou faux
 PRINT
